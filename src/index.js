@@ -46,7 +46,8 @@ export default class SDK {
     createApplication: req => {
       const { body } = req || {};
 
-      if (!body) throw new Error("requetBody is required for createApplication");
+      if (!body)
+        throw new Error("requetBody is required for createApplication");
 
       return fetch(`${this.base}/applications`, {
         method: "POST",
@@ -78,7 +79,8 @@ export default class SDK {
     getApplication: req => {
       const { applicationId } = req || {};
 
-      if (!applicationId) throw new Error("applicationId is required for getApplication");
+      if (!applicationId)
+        throw new Error("applicationId is required for getApplication");
 
       return fetch(`${this.base}/applications/${applicationId}`, {
         method: "GET",
@@ -93,7 +95,8 @@ export default class SDK {
     deleteApplication: req => {
       const { applicationId } = req || {};
 
-      if (!applicationId) throw new Error("applicationId is required for deleteApplication");
+      if (!applicationId)
+        throw new Error("applicationId is required for deleteApplication");
 
       return fetch(`${this.base}/applications/${applicationId}`, {
         method: "DELETE",
@@ -109,7 +112,8 @@ export default class SDK {
     approveApplication: req => {
       const { applicationId } = req || {};
 
-      if (!applicationId) throw new Error("applicationId is required for approveApplication");
+      if (!applicationId)
+        throw new Error("applicationId is required for approveApplication");
 
       return fetch(`${this.base}/applications/${applicationId}/!approve`, {
         method: "PUT",
@@ -125,7 +129,8 @@ export default class SDK {
     rejectApplication: req => {
       const { applicationId } = req || {};
 
-      if (!applicationId) throw new Error("applicationId is required for rejectApplication");
+      if (!applicationId)
+        throw new Error("applicationId is required for rejectApplication");
 
       return fetch(`${this.base}/applications/${applicationId}/!reject`, {
         method: "PUT",
