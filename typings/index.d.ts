@@ -5,6 +5,7 @@ declare class SDK {
   token: string | (() => string);
   auth: string;
 
+  records: RecordsAPI;
   applications: ApplicationsAPI;
 }
 
@@ -13,6 +14,16 @@ export interface Options {
   token?: string | (() => string);
 }
 
+export interface RecordsAPI {
+  /**
+   * Create record
+   */
+  createRecord(req: CreateRecordRequest): Promise<CreateRecordResponse>;
+  /**
+   * List all records
+   */
+  listRecords(req: ListRecordsRequest): Promise<ListRecordsResponse>;
+}
 export interface ApplicationsAPI {
   /**
    * Create application
@@ -40,6 +51,150 @@ export interface ApplicationsAPI {
   rejectApplication(req: RejectApplicationRequest): Promise<RejectApplicationResponse>;
 }
 
+export interface CreateRecordRequest {
+  /**
+   * 记录
+   */
+  body: {
+    /**
+     * 关联的项目
+     */
+    project?: string;
+    /**
+     * 关联的ticket
+     */
+    ticket?: string;
+    /**
+     * 关联的ticket type
+     */
+    ticketType?: string;
+    /**
+     * 关联的milestone
+     */
+    milestone?: string;
+    /**
+     * 记录内容
+     */
+    content?: string;
+    /**
+     * 关联的用户
+     */
+    user?: string;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
+  };
+}
+export interface CreateRecordResponse {
+  /**
+   * 记录
+   */
+  body: {
+    /**
+     * 关联的项目
+     */
+    project?: string;
+    /**
+     * 关联的ticket
+     */
+    ticket?: string;
+    /**
+     * 关联的ticket type
+     */
+    ticketType?: string;
+    /**
+     * 关联的milestone
+     */
+    milestone?: string;
+    /**
+     * 记录内容
+     */
+    content?: string;
+    /**
+     * 关联的用户
+     */
+    user?: string;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  };
+}
+export interface ListRecordsRequest {
+  query?: {
+    _limit?: number;
+    _offset?: number;
+    _sort?: string;
+    _select?: string[];
+    user?: string;
+    ref?: string;
+    /**
+     * 申请的状态
+     */
+    state?: "APPLYING" | "APPROVED" | "REJECTED";
+    project?: string;
+    ticket?: string;
+    ticketType?: string;
+    milestone?: string;
+  };
+}
+export interface ListRecordsResponse {
+  body: ({
+    /**
+     * 关联的项目
+     */
+    project?: string;
+    /**
+     * 关联的ticket
+     */
+    ticket?: string;
+    /**
+     * 关联的ticket type
+     */
+    ticketType?: string;
+    /**
+     * 关联的milestone
+     */
+    milestone?: string;
+    /**
+     * 记录内容
+     */
+    content?: string;
+    /**
+     * 关联的用户
+     */
+    user?: string;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  })[];
+  headers: {
+    "x-total-count"?: number;
+  };
+}
 export interface CreateApplicationRequest {
   body: {
     /**
@@ -101,10 +256,12 @@ export interface ListApplicationsRequest {
     _offset?: number;
     _sort?: string;
     _select?: string[];
+    user?: string;
+    ref?: string;
     /**
      * 申请的状态
      */
-    ref?: "APPLYING" | "APPROVED" | "REJECTED";
+    state?: "APPLYING" | "APPROVED" | "REJECTED";
   };
 }
 export interface ListApplicationsResponse {
@@ -370,6 +527,94 @@ export interface ApplicationCreateDoc {
    */
   oid?: string;
 }
+
+/**
+ * 记录
+ */
+export interface RecordDoc {
+  /**
+   * 关联的项目
+   */
+  project?: string;
+  /**
+   * 关联的ticket
+   */
+  ticket?: string;
+  /**
+   * 关联的ticket type
+   */
+  ticketType?: string;
+  /**
+   * 关联的milestone
+   */
+  milestone?: string;
+  /**
+   * 记录内容
+   */
+  content?: string;
+  /**
+   * 关联的用户
+   */
+  user?: string;
+  /**
+   * 额外数据
+   */
+  extra?: {
+    key?: string;
+    value?: string;
+  }[];
+}
+
+/**
+ * 记录
+ */
+export type Record = {
+  /**
+   * 关联的项目
+   */
+  project?: string;
+  /**
+   * 关联的ticket
+   */
+  ticket?: string;
+  /**
+   * 关联的ticket type
+   */
+  ticketType?: string;
+  /**
+   * 关联的milestone
+   */
+  milestone?: string;
+  /**
+   * 记录内容
+   */
+  content?: string;
+  /**
+   * 关联的用户
+   */
+  user?: string;
+  /**
+   * 额外数据
+   */
+  extra?: {
+    key?: string;
+    value?: string;
+  }[];
+} & {
+  id: string;
+  updateAt?: Date;
+  updateBy?: string;
+  createAt?: Date;
+  createBy?: string;
+};
+
+/**
+ * 额外数据
+ */
+export type Extra = {
+  key?: string;
+  value?: string;
+}[];
 
 export interface MongoDefault {
   id: string;

@@ -34,6 +34,43 @@ export default class SDK {
   }
 
   /**
+   * records's methods
+   */
+  records = {
+    /**
+     * Create record
+     *
+     * @param {CreateRecordRequest} req createRecord request
+     * @returns {Promise<CreateRecordResponse>} The single record Doc
+     */
+    createRecord: req => {
+      const { body } = req || {};
+
+      if (!body) throw new Error("requetBody is required for createRecord");
+
+      return fetch(`${this.base}/records`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * List all records
+     *
+     * @param {ListRecordsRequest} req listRecords request
+     * @returns {Promise<ListRecordsResponse>} A paged array of records
+     */
+    listRecords: req => {
+      const { query } = req || {};
+
+      return fetch(`${this.base}/records`, {
+        method: "GET",
+        query,
+        headers: { Authorization: this.auth },
+      });
+    },
+  };
+  /**
    * applications's methods
    */
   applications = {
