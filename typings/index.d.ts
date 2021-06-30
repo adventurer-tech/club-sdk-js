@@ -73,6 +73,10 @@ export interface CreateRecordRequest {
      */
     milestone?: string;
     /**
+     * 时间
+     */
+    at?: Date;
+    /**
      * 记录内容
      */
     content?: string;
@@ -110,6 +114,10 @@ export interface CreateRecordResponse {
      * 关联的milestone
      */
     milestone?: string;
+    /**
+     * 时间
+     */
+    at?: Date;
     /**
      * 记录内容
      */
@@ -169,6 +177,10 @@ export interface ListRecordsResponse {
      * 关联的milestone
      */
     milestone?: string;
+    /**
+     * 时间
+     */
+    at?: Date;
     /**
      * 记录内容
      */
@@ -549,6 +561,10 @@ export interface RecordDoc {
    */
   milestone?: string;
   /**
+   * 时间
+   */
+  at?: Date;
+  /**
    * 记录内容
    */
   content?: string;
@@ -585,6 +601,10 @@ export type Record = {
    * 关联的milestone
    */
   milestone?: string;
+  /**
+   * 时间
+   */
+  at?: Date;
   /**
    * 记录内容
    */
