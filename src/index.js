@@ -175,4 +175,106 @@ export default class SDK {
       });
     },
   };
+  /**
+   * members's methods
+   */
+  members = {
+    /**
+     * Create member
+     *
+     * @param {CreateMemberRequest} req createMember request
+     * @returns {Promise<CreateMemberResponse>} The single member Doc
+     */
+    createMember: req => {
+      const { body } = req || {};
+
+      if (!body) throw new Error("requetBody is required for createMember");
+
+      return fetch(`${this.base}/members`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * List all members
+     *
+     * @param {ListMembersRequest} req listMembers request
+     * @returns {Promise<ListMembersResponse>} A paged array of members
+     */
+    listMembers: req => {
+      const { query } = req || {};
+
+      return fetch(`${this.base}/members`, {
+        method: "GET",
+        query,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * Find member by id
+     *
+     * @param {GetMemberRequest} req getMember request
+     * @returns {Promise<GetMemberResponse>} Expected response to a valid request
+     */
+    getMember: req => {
+      const { memberId } = req || {};
+
+      if (!memberId) throw new Error("memberId is required for getMember");
+
+      return fetch(`${this.base}/members/${memberId}`, {
+        method: "GET",
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * Update member
+     *
+     * @param {UpdateMemberRequest} req updateMember request
+     * @returns {Promise<UpdateMemberResponse>} The member
+     */
+    updateMember: req => {
+      const { memberId, body } = req || {};
+
+      if (!memberId) throw new Error("memberId is required for updateMember");
+      if (!body) throw new Error("requetBody is required for updateMember");
+
+      return fetch(`${this.base}/members/${memberId}`, {
+        method: "PUT",
+        body,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * Delete member
+     *
+     * @param {DeleteMemberRequest} req deleteMember request
+     */
+    deleteMember: req => {
+      const { memberId } = req || {};
+
+      if (!memberId) throw new Error("memberId is required for deleteMember");
+
+      return fetch(`${this.base}/members/${memberId}`, {
+        method: "DELETE",
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * Find member by userId
+     *
+     * @param {GetMemberByUserRequest} req getMemberByUser request
+     * @returns {Promise<GetMemberByUserResponse>} Expected response to a valid request
+     */
+    getMemberByUser: req => {
+      const { userId } = req || {};
+
+      if (!userId) throw new Error("userId is required for getMemberByUser");
+
+      return fetch(`${this.base}/users/${userId}/member`, {
+        method: "GET",
+        headers: { Authorization: this.auth },
+      });
+    },
+  };
 }
