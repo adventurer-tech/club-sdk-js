@@ -112,6 +112,10 @@ export interface CreateRecordRequest {
      */
     type?: string;
     /**
+     * 事件
+     */
+    event?: string;
+    /**
      * 关联的用户
      */
     user?: string;
@@ -157,6 +161,10 @@ export interface CreateRecordResponse {
      * 记录类型
      */
     type?: string;
+    /**
+     * 事件
+     */
+    event?: string;
     /**
      * 关联的用户
      */
@@ -225,6 +233,10 @@ export interface ListRecordsResponse {
      * 记录类型
      */
     type?: string;
+    /**
+     * 事件
+     */
+    event?: string;
     /**
      * 关联的用户
      */
@@ -1185,6 +1197,10 @@ export interface RecordDoc {
    */
   type?: string;
   /**
+   * 事件
+   */
+  event?: string;
+  /**
    * 关联的用户
    */
   user?: string;
@@ -1229,6 +1245,10 @@ export type Record = {
    * 记录类型
    */
   type?: string;
+  /**
+   * 事件
+   */
+  event?: string;
   /**
    * 关联的用户
    */
