@@ -8,6 +8,8 @@ declare class SDK {
   records: RecordsAPI;
   applications: ApplicationsAPI;
   members: MembersAPI;
+  favorite: FavoriteAPI;
+  notification: NotificationAPI;
 }
 
 export interface Options {
@@ -76,6 +78,42 @@ export interface MembersAPI {
    * Find member by userId
    */
   getMemberByUser(req: GetMemberByUserRequest): Promise<GetMemberByUserResponse>;
+}
+export interface FavoriteAPI {
+  /**
+   * Create favorite
+   */
+  createFavorite(req: CreateFavoriteRequest): Promise<CreateFavoriteResponse>;
+  /**
+   * List all favorites
+   */
+  listFavorites(req: ListFavoritesRequest): Promise<ListFavoritesResponse>;
+  /**
+   * Delete favorite
+   */
+  deleteFavorite(req: DeleteFavoriteRequest): Promise<void>;
+}
+export interface NotificationAPI {
+  /**
+   * Create notification
+   */
+  createNotification(req: CreateNotificationRequest): Promise<CreateNotificationResponse>;
+  /**
+   * List all system notifications
+   */
+  listSystemNotifications(
+    req: ListSystemNotificationsRequest
+  ): Promise<ListSystemNotificationsResponse>;
+  /**
+   * List all member notifications
+   */
+  listMemberNotifications(
+    req: ListMemberNotificationsRequest
+  ): Promise<ListMemberNotificationsResponse>;
+  /**
+   * Delete favorite
+   */
+  deleteNotification(req: DeleteNotificationRequest): Promise<void>;
 }
 
 export interface CreateRecordRequest {
@@ -261,10 +299,7 @@ export interface ListRecordsResponse {
 }
 export interface CreateApplicationRequest {
   body: {
-    /**
-     * 申请的类型
-     */
-    type: "REPOSITORY" | "PROJECT";
+    type: string;
     /**
      * 关联的资源，比如 project, repository 的 id 等
      */
@@ -280,10 +315,7 @@ export interface CreateApplicationResponse {
    * 申请
    */
   body: {
-    /**
-     * 申请的类型
-     */
-    type?: "REPOSITORY" | "PROJECT";
+    type?: string;
     /**
      * 申请的状态
      */
@@ -330,10 +362,7 @@ export interface ListApplicationsRequest {
 }
 export interface ListApplicationsResponse {
   body: ({
-    /**
-     * 申请的类型
-     */
-    type?: "REPOSITORY" | "PROJECT";
+    type?: string;
     /**
      * 申请的状态
      */
@@ -375,10 +404,7 @@ export interface GetApplicationResponse {
    * 申请
    */
   body: {
-    /**
-     * 申请的类型
-     */
-    type?: "REPOSITORY" | "PROJECT";
+    type?: string;
     /**
      * 申请的状态
      */
@@ -420,10 +446,7 @@ export interface ApproveApplicationResponse {
    * 申请
    */
   body: {
-    /**
-     * 申请的类型
-     */
-    type?: "REPOSITORY" | "PROJECT";
+    type?: string;
     /**
      * 申请的状态
      */
@@ -462,10 +485,7 @@ export interface RejectApplicationResponse {
    * 申请
    */
   body: {
-    /**
-     * 申请的类型
-     */
-    type?: "REPOSITORY" | "PROJECT";
+    type?: string;
     /**
      * 申请的状态
      */
@@ -1068,12 +1088,182 @@ export interface GetMemberByUserResponse {
     createBy?: string;
   };
 }
+export interface CreateFavoriteRequest {
+  body: {
+    /**
+     * 成员
+     */
+    member: string;
+    /**
+     * 收藏的ticket
+     */
+    ticket?: string;
+    /**
+     * 收藏的project
+     */
+    project?: string;
+    /**
+     * 收藏类型，比如 project | ticket
+     */
+    type: string;
+  };
+}
+export interface CreateFavoriteResponse {
+  /**
+   * 收藏
+   */
+  body: {
+    /**
+     * 成员
+     */
+    member: string;
+    /**
+     * 收藏的ticket
+     */
+    ticket?: string;
+    /**
+     * 收藏的project
+     */
+    project?: string;
+    /**
+     * 收藏类型，比如 project | ticket
+     */
+    type: string;
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  };
+}
+export interface ListFavoritesRequest {
+  query?: {
+    _limit?: number;
+    _offset?: number;
+    _sort?: string;
+    _select?: string[];
+    project?: string;
+    ticket?: string;
+    state?: string;
+    type?: string;
+  };
+}
+export interface ListFavoritesResponse {
+  body: ({
+    /**
+     * 成员
+     */
+    member: string;
+    /**
+     * 收藏的ticket
+     */
+    ticket?: string;
+    /**
+     * 收藏的project
+     */
+    project?: string;
+    /**
+     * 收藏类型，比如 project | ticket
+     */
+    type: string;
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  })[];
+  headers: {
+    "x-total-count"?: number;
+  };
+}
+export interface DeleteFavoriteRequest {
+  favoriteId: string;
+}
+export interface CreateNotificationRequest {
+  /**
+   * 通知
+   */
+  body: {
+    member?: string;
+    content: string;
+    type: string;
+    read?: boolean;
+  };
+}
+export interface CreateNotificationResponse {
+  /**
+   * 通知
+   */
+  body: {
+    member?: string;
+    content: string;
+    type: string;
+    read?: boolean;
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  };
+}
+export interface ListSystemNotificationsRequest {
+  query?: {
+    _limit?: number;
+    _offset?: number;
+    _sort?: string;
+    _select?: string[];
+  };
+}
+export interface ListSystemNotificationsResponse {
+  body: ({
+    member?: string;
+    content: string;
+    type: string;
+    read?: boolean;
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  })[];
+  headers: {
+    "x-total-count"?: number;
+  };
+}
+export interface ListMemberNotificationsRequest {
+  memberId: string;
+  query?: {
+    _limit?: number;
+    _offset?: number;
+    _sort?: string;
+    _select?: string[];
+  };
+}
+export interface ListMemberNotificationsResponse {
+  body: ({
+    member?: string;
+    content: string;
+    type: string;
+    read?: boolean;
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  })[];
+  headers: {
+    "x-total-count"?: number;
+  };
+}
+export interface DeleteNotificationRequest {
+  notificationId: string;
+}
 export type ObjectId = string;
-
-/**
- * 申请的类型
- */
-export type ApplicationTypeEnum = "REPOSITORY" | "PROJECT";
 
 /**
  * 申请的状态
@@ -1083,10 +1273,7 @@ export type ApplicationStateEnum = "APPLYING" | "APPROVED" | "REJECTED";
 export type DateTime = Date;
 
 export interface ApplicationDoc {
-  /**
-   * 申请的类型
-   */
-  type?: "REPOSITORY" | "PROJECT";
+  type?: string;
   /**
    * 申请的状态
    */
@@ -1115,10 +1302,7 @@ export interface ApplicationDoc {
  * 申请
  */
 export type Application = {
-  /**
-   * 申请的类型
-   */
-  type?: "REPOSITORY" | "PROJECT";
+  type?: string;
   /**
    * 申请的状态
    */
@@ -1150,10 +1334,7 @@ export type Application = {
 };
 
 export interface ApplicationCreateDoc {
-  /**
-   * 申请的类型
-   */
-  type: "REPOSITORY" | "PROJECT";
+  type: string;
   /**
    * 关联的资源，比如 project, repository 的 id 等
    */
@@ -1260,6 +1441,79 @@ export type Record = {
     key?: string;
     value?: string;
   }[];
+} & {
+  id: string;
+  updateAt?: Date;
+  updateBy?: string;
+  createAt?: Date;
+  createBy?: string;
+};
+
+export interface FavoriteDoc {
+  /**
+   * 成员
+   */
+  member: string;
+  /**
+   * 收藏的ticket
+   */
+  ticket?: string;
+  /**
+   * 收藏的project
+   */
+  project?: string;
+  /**
+   * 收藏类型，比如 project | ticket
+   */
+  type: string;
+}
+
+/**
+ * 收藏
+ */
+export type Favorite = {
+  /**
+   * 成员
+   */
+  member: string;
+  /**
+   * 收藏的ticket
+   */
+  ticket?: string;
+  /**
+   * 收藏的project
+   */
+  project?: string;
+  /**
+   * 收藏类型，比如 project | ticket
+   */
+  type: string;
+} & {
+  id: string;
+  updateAt?: Date;
+  updateBy?: string;
+  createAt?: Date;
+  createBy?: string;
+};
+
+/**
+ * 通知
+ */
+export interface NotificationDoc {
+  member?: string;
+  content: string;
+  type: string;
+  read?: boolean;
+}
+
+/**
+ * 通知
+ */
+export type Notification = {
+  member?: string;
+  content: string;
+  type: string;
+  read?: boolean;
 } & {
   id: string;
   updateAt?: Date;

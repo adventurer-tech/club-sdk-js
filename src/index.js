@@ -277,4 +277,129 @@ export default class SDK {
       });
     },
   };
+  /**
+   * favorite's methods
+   */
+  favorite = {
+    /**
+     * Create favorite
+     *
+     * @param {CreateFavoriteRequest} req createFavorite request
+     * @returns {Promise<CreateFavoriteResponse>} The single favorite Doc
+     */
+    createFavorite: req => {
+      const { body } = req || {};
+
+      if (!body) throw new Error("requetBody is required for createFavorite");
+
+      return fetch(`${this.base}/favorite`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * List all favorites
+     *
+     * @param {ListFavoritesRequest} req listFavorites request
+     * @returns {Promise<ListFavoritesResponse>} A paged array of favorites
+     */
+    listFavorites: req => {
+      const { query } = req || {};
+
+      return fetch(`${this.base}/favorite`, {
+        method: "GET",
+        query,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * Delete favorite
+     *
+     * @param {DeleteFavoriteRequest} req deleteFavorite request
+     */
+    deleteFavorite: req => {
+      const { favoriteId } = req || {};
+
+      if (!favoriteId)
+        throw new Error("favoriteId is required for deleteFavorite");
+
+      return fetch(`${this.base}/favorite/${favoriteId}`, {
+        method: "DELETE",
+        headers: { Authorization: this.auth },
+      });
+    },
+  };
+  /**
+   * notification's methods
+   */
+  notification = {
+    /**
+     * Create notification
+     *
+     * @param {CreateNotificationRequest} req createNotification request
+     * @returns {Promise<CreateNotificationResponse>} The single notification Doc
+     */
+    createNotification: req => {
+      const { body } = req || {};
+
+      if (!body)
+        throw new Error("requetBody is required for createNotification");
+
+      return fetch(`${this.base}/notification`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * List all system notifications
+     *
+     * @param {ListSystemNotificationsRequest} req listSystemNotifications request
+     * @returns {Promise<ListSystemNotificationsResponse>} A paged array of notifications
+     */
+    listSystemNotifications: req => {
+      const { query } = req || {};
+
+      return fetch(`${this.base}/notification/system`, {
+        method: "GET",
+        query,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * List all member notifications
+     *
+     * @param {ListMemberNotificationsRequest} req listMemberNotifications request
+     * @returns {Promise<ListMemberNotificationsResponse>} A paged array of notifications
+     */
+    listMemberNotifications: req => {
+      const { memberId, query } = req || {};
+
+      if (!memberId)
+        throw new Error("memberId is required for listMemberNotifications");
+
+      return fetch(`${this.base}/notification/member/${memberId}`, {
+        method: "GET",
+        query,
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * Delete favorite
+     *
+     * @param {DeleteNotificationRequest} req deleteNotification request
+     */
+    deleteNotification: req => {
+      const { notificationId } = req || {};
+
+      if (!notificationId)
+        throw new Error("notificationId is required for deleteNotification");
+
+      return fetch(`${this.base}/notification/${notificationId}`, {
+        method: "DELETE",
+        headers: { Authorization: this.auth },
+      });
+    },
+  };
 }
