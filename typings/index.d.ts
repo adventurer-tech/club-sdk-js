@@ -1190,6 +1190,13 @@ export interface CreateNotificationRequest {
     content: string;
     type: string;
     read?: boolean;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
   };
 }
 export interface CreateNotificationResponse {
@@ -1201,6 +1208,13 @@ export interface CreateNotificationResponse {
     content: string;
     type: string;
     read?: boolean;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
   } & {
     id: string;
     updateAt?: Date;
@@ -1223,6 +1237,13 @@ export interface ListSystemNotificationsResponse {
     content: string;
     type: string;
     read?: boolean;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
   } & {
     id: string;
     updateAt?: Date;
@@ -1249,6 +1270,13 @@ export interface ListMemberNotificationsResponse {
     content: string;
     type: string;
     read?: boolean;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
   } & {
     id: string;
     updateAt?: Date;
@@ -1504,6 +1532,13 @@ export interface NotificationDoc {
   content: string;
   type: string;
   read?: boolean;
+  /**
+   * 额外数据
+   */
+  extra?: {
+    key?: string;
+    value?: string;
+  }[];
 }
 
 /**
@@ -1514,6 +1549,13 @@ export type Notification = {
   content: string;
   type: string;
   read?: boolean;
+  /**
+   * 额外数据
+   */
+  extra?: {
+    key?: string;
+    value?: string;
+  }[];
 } & {
   id: string;
   updateAt?: Date;
