@@ -276,6 +276,39 @@ export default class SDK {
         headers: { Authorization: this.auth },
       });
     },
+    /**
+     * Find member by github
+     *
+     * @param {GetMemberByGithubRequest} req getMemberByGithub request
+     * @returns {Promise<GetMemberByGithubResponse>} Expected response to a valid request
+     */
+    getMemberByGithub: req => {
+      const { github } = req || {};
+
+      if (!github) throw new Error("github is required for getMemberByGithub");
+
+      return fetch(`${this.base}/github/${github}/member`, {
+        method: "GET",
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
+     * Create invitation
+     *
+     * @param {CreateInvitationRequest} req createInvitation request
+     * @returns {Promise<CreateInvitationResponse>} The single invitation Doc
+     */
+    createInvitation: req => {
+      const { body } = req || {};
+
+      if (!body) throw new Error("requetBody is required for createInvitation");
+
+      return fetch(`${this.base}/invitation`, {
+        method: "POST",
+        body,
+        headers: { Authorization: this.auth },
+      });
+    },
   };
   /**
    * favorite's methods

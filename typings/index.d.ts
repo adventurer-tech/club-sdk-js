@@ -78,6 +78,14 @@ export interface MembersAPI {
    * Find member by userId
    */
   getMemberByUser(req: GetMemberByUserRequest): Promise<GetMemberByUserResponse>;
+  /**
+   * Find member by github
+   */
+  getMemberByGithub(req: GetMemberByGithubRequest): Promise<GetMemberByGithubResponse>;
+  /**
+   * Create invitation
+   */
+  createInvitation(req: CreateInvitationRequest): Promise<CreateInvitationResponse>;
 }
 export interface FavoriteAPI {
   /**
@@ -128,7 +136,7 @@ export interface CreateRecordRequest {
     /**
      * 关联的ticket
      */
-    ticket?: string;
+    ticket?: string | null;
     /**
      * 关联的ticket type
      */
@@ -136,7 +144,7 @@ export interface CreateRecordRequest {
     /**
      * 关联的milestone
      */
-    milestone?: string;
+    milestone?: string | null;
     /**
      * 时间
      */
@@ -149,6 +157,10 @@ export interface CreateRecordRequest {
      * 记录类型
      */
     type?: string;
+    /**
+     * 记录标签
+     */
+    tags?: string[];
     /**
      * 事件
      */
@@ -178,7 +190,7 @@ export interface CreateRecordResponse {
     /**
      * 关联的ticket
      */
-    ticket?: string;
+    ticket?: string | null;
     /**
      * 关联的ticket type
      */
@@ -186,7 +198,7 @@ export interface CreateRecordResponse {
     /**
      * 关联的milestone
      */
-    milestone?: string;
+    milestone?: string | null;
     /**
      * 时间
      */
@@ -199,6 +211,10 @@ export interface CreateRecordResponse {
      * 记录类型
      */
     type?: string;
+    /**
+     * 记录标签
+     */
+    tags?: string[];
     /**
      * 事件
      */
@@ -238,6 +254,7 @@ export interface ListRecordsRequest {
     ticket?: string;
     ticketType?: string;
     type?: string;
+    tags?: string[];
     milestone?: string;
   };
 }
@@ -250,7 +267,7 @@ export interface ListRecordsResponse {
     /**
      * 关联的ticket
      */
-    ticket?: string;
+    ticket?: string | null;
     /**
      * 关联的ticket type
      */
@@ -258,7 +275,7 @@ export interface ListRecordsResponse {
     /**
      * 关联的milestone
      */
-    milestone?: string;
+    milestone?: string | null;
     /**
      * 时间
      */
@@ -271,6 +288,10 @@ export interface ListRecordsResponse {
      * 记录类型
      */
     type?: string;
+    /**
+     * 记录标签
+     */
+    tags?: string[];
     /**
      * 事件
      */
@@ -354,6 +375,7 @@ export interface ListApplicationsRequest {
     _select?: string[];
     user?: string;
     ref?: string;
+    type?: string;
     /**
      * 申请的状态
      */
@@ -519,6 +541,7 @@ export interface RejectApplicationResponse {
 export interface CreateMemberRequest {
   body: {
     user: string;
+    ns?: string;
     github?: string;
     /**
      * 名字
@@ -574,6 +597,7 @@ export interface CreateMemberResponse {
      * 名字
      */
     name?: string;
+    ns?: string;
     /**
      * 工号
      */
@@ -638,6 +662,10 @@ export interface CreateMemberResponse {
      * 等级
      */
     level?: number;
+    /**
+     * 下一等级经验值
+     */
+    nextLevelExp?: number;
     /**
      * 额外数据
      */
@@ -660,6 +688,8 @@ export interface ListMembersRequest {
     _sort?: string;
     _select?: string[];
     name_like?: string;
+    ns?: string;
+    position?: string;
     workNumber?: string;
   };
 }
@@ -673,6 +703,7 @@ export interface ListMembersResponse {
      * 名字
      */
     name?: string;
+    ns?: string;
     /**
      * 工号
      */
@@ -737,6 +768,10 @@ export interface ListMembersResponse {
      * 等级
      */
     level?: number;
+    /**
+     * 下一等级经验值
+     */
+    nextLevelExp?: number;
     /**
      * 额外数据
      */
@@ -771,6 +806,7 @@ export interface GetMemberResponse {
      * 名字
      */
     name?: string;
+    ns?: string;
     /**
      * 工号
      */
@@ -836,6 +872,10 @@ export interface GetMemberResponse {
      */
     level?: number;
     /**
+     * 下一等级经验值
+     */
+    nextLevelExp?: number;
+    /**
      * 额外数据
      */
     extra?: {
@@ -857,6 +897,7 @@ export interface UpdateMemberRequest {
      * 名字
      */
     name?: string;
+    ns?: string;
     /**
      * 职位
      */
@@ -886,7 +927,7 @@ export interface UpdateMemberRequest {
      */
     avatar?: string;
     /**
-     * 只有 MEMBER_MAMANGER 可以更新
+     * 只有 MEMBER_MANAGER 可以更新
      */
     level?: string;
     /**
@@ -911,6 +952,7 @@ export interface UpdateMemberResponse {
      * 名字
      */
     name?: string;
+    ns?: string;
     /**
      * 工号
      */
@@ -975,6 +1017,10 @@ export interface UpdateMemberResponse {
      * 等级
      */
     level?: number;
+    /**
+     * 下一等级经验值
+     */
+    nextLevelExp?: number;
     /**
      * 额外数据
      */
@@ -1009,6 +1055,7 @@ export interface GetMemberByUserResponse {
      * 名字
      */
     name?: string;
+    ns?: string;
     /**
      * 工号
      */
@@ -1074,12 +1121,149 @@ export interface GetMemberByUserResponse {
      */
     level?: number;
     /**
+     * 下一等级经验值
+     */
+    nextLevelExp?: number;
+    /**
      * 额外数据
      */
     extra?: {
       key?: string;
       value?: string;
     }[];
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  };
+}
+export interface GetMemberByGithubRequest {
+  github: string;
+}
+export interface GetMemberByGithubResponse {
+  /**
+   * 成员
+   */
+  body: {
+    /**
+     * 关联用户
+     */
+    user?: string;
+    /**
+     * 名字
+     */
+    name?: string;
+    ns?: string;
+    /**
+     * 工号
+     */
+    workNumber?: string;
+    /**
+     * 职位
+     */
+    position?: string;
+    /**
+     * 手机号
+     */
+    phone?: string;
+    /**
+     * 身份证号
+     */
+    idCard?: string;
+    /**
+     * 开户行
+     */
+    bank?: string;
+    /**
+     * 银行卡号
+     */
+    bankCard?: string;
+    /**
+     * 邮箱
+     */
+    email?: string;
+    /**
+     * 用户github
+     */
+    github?: string;
+    /**
+     * 头像
+     */
+    avatar?: string;
+    /**
+     * 钱包地址
+     */
+    wallet?: string;
+    /**
+     * 经验值
+     */
+    exp?: number;
+    /**
+     * 经验账号地址
+     */
+    expAccount?: string;
+    /**
+     * 当前已占用的token
+     */
+    token?: number;
+    /**
+     * 令牌账号地址
+     */
+    tokenAccount?: string;
+    /**
+     * 最大token数
+     */
+    maxToken?: number;
+    /**
+     * 等级
+     */
+    level?: number;
+    /**
+     * 下一等级经验值
+     */
+    nextLevelExp?: number;
+    /**
+     * 额外数据
+     */
+    extra?: {
+      key?: string;
+      value?: string;
+    }[];
+  } & {
+    id: string;
+    updateAt?: Date;
+    updateBy?: string;
+    createAt?: Date;
+    createBy?: string;
+  };
+}
+export interface CreateInvitationRequest {
+  /**
+   * 成员邀请
+   */
+  body: {
+    /**
+     * 被邀请人的邮箱
+     */
+    email: string;
+  };
+}
+export interface CreateInvitationResponse {
+  /**
+   * 邀请
+   */
+  body: {
+    /**
+     * 被邀请人的邮箱
+     */
+    email: string;
+    /**
+     * 邀请码
+     */
+    code?: string;
+    expireAt?: Date;
   } & {
     id: string;
     updateAt?: Date;
@@ -1197,6 +1381,7 @@ export interface CreateNotificationRequest {
       key?: string;
       value?: string;
     }[];
+    oid: string;
   };
 }
 export interface CreateNotificationResponse {
@@ -1215,6 +1400,7 @@ export interface CreateNotificationResponse {
       key?: string;
       value?: string;
     }[];
+    oid: string;
   } & {
     id: string;
     updateAt?: Date;
@@ -1244,6 +1430,7 @@ export interface ListSystemNotificationsResponse {
       key?: string;
       value?: string;
     }[];
+    oid: string;
   } & {
     id: string;
     updateAt?: Date;
@@ -1277,6 +1464,7 @@ export interface ListMemberNotificationsResponse {
       key?: string;
       value?: string;
     }[];
+    oid: string;
   } & {
     id: string;
     updateAt?: Date;
@@ -1292,6 +1480,10 @@ export interface DeleteNotificationRequest {
   notificationId: string;
 }
 export type ObjectId = string;
+
+export type NullableObjectId2 = NullableObjectId | NullableObjectId1;
+export type NullableObjectId = string;
+export type NullableObjectId1 = null;
 
 /**
  * 申请的状态
@@ -1384,7 +1576,7 @@ export interface RecordDoc {
   /**
    * 关联的ticket
    */
-  ticket?: string;
+  ticket?: string | null;
   /**
    * 关联的ticket type
    */
@@ -1392,7 +1584,7 @@ export interface RecordDoc {
   /**
    * 关联的milestone
    */
-  milestone?: string;
+  milestone?: string | null;
   /**
    * 时间
    */
@@ -1405,6 +1597,10 @@ export interface RecordDoc {
    * 记录类型
    */
   type?: string;
+  /**
+   * 记录标签
+   */
+  tags?: string[];
   /**
    * 事件
    */
@@ -1433,7 +1629,7 @@ export type Record = {
   /**
    * 关联的ticket
    */
-  ticket?: string;
+  ticket?: string | null;
   /**
    * 关联的ticket type
    */
@@ -1441,7 +1637,7 @@ export type Record = {
   /**
    * 关联的milestone
    */
-  milestone?: string;
+  milestone?: string | null;
   /**
    * 时间
    */
@@ -1454,6 +1650,10 @@ export type Record = {
    * 记录类型
    */
   type?: string;
+  /**
+   * 记录标签
+   */
+  tags?: string[];
   /**
    * 事件
    */
@@ -1539,6 +1739,7 @@ export interface NotificationDoc {
     key?: string;
     value?: string;
   }[];
+  oid: string;
 }
 
 /**
@@ -1556,6 +1757,7 @@ export type Notification = {
     key?: string;
     value?: string;
   }[];
+  oid: string;
 } & {
   id: string;
   updateAt?: Date;
@@ -1566,6 +1768,7 @@ export type Notification = {
 
 export interface MemberCreateBody {
   user: string;
+  ns?: string;
   github?: string;
   /**
    * 名字
@@ -1613,6 +1816,7 @@ export interface MemberUpdateBody {
    * 名字
    */
   name?: string;
+  ns?: string;
   /**
    * 职位
    */
@@ -1642,7 +1846,7 @@ export interface MemberUpdateBody {
    */
   avatar?: string;
   /**
-   * 只有 MEMBER_MAMANGER 可以更新
+   * 只有 MEMBER_MANAGER 可以更新
    */
   level?: string;
   /**
@@ -1666,6 +1870,7 @@ export interface MemberDoc {
    * 名字
    */
   name?: string;
+  ns?: string;
   /**
    * 工号
    */
@@ -1730,6 +1935,10 @@ export interface MemberDoc {
    * 等级
    */
   level?: number;
+  /**
+   * 下一等级经验值
+   */
+  nextLevelExp?: number;
   /**
    * 额外数据
    */
@@ -1751,6 +1960,7 @@ export type Member = {
    * 名字
    */
   name?: string;
+  ns?: string;
   /**
    * 工号
    */
@@ -1816,12 +2026,62 @@ export type Member = {
    */
   level?: number;
   /**
+   * 下一等级经验值
+   */
+  nextLevelExp?: number;
+  /**
    * 额外数据
    */
   extra?: {
     key?: string;
     value?: string;
   }[];
+} & {
+  id: string;
+  updateAt?: Date;
+  updateBy?: string;
+  createAt?: Date;
+  createBy?: string;
+};
+
+/**
+ * 成员邀请
+ */
+export interface InvitationCreateBody {
+  /**
+   * 被邀请人的邮箱
+   */
+  email: string;
+}
+
+/**
+ * 邀请
+ */
+export interface InvitationDoc {
+  /**
+   * 被邀请人的邮箱
+   */
+  email: string;
+  /**
+   * 邀请码
+   */
+  code?: string;
+  expireAt?: Date;
+}
+
+/**
+ * 邀请
+ */
+export type Invitation = {
+  /**
+   * 被邀请人的邮箱
+   */
+  email: string;
+  /**
+   * 邀请码
+   */
+  code?: string;
+  expireAt?: Date;
 } & {
   id: string;
   updateAt?: Date;
