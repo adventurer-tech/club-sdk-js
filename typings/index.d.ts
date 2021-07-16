@@ -133,6 +133,7 @@ export interface CreateRecordRequest {
      * 关联的项目
      */
     project?: string;
+    member?: string;
     /**
      * 关联的ticket
      */
@@ -187,6 +188,7 @@ export interface CreateRecordResponse {
      * 关联的项目
      */
     project?: string;
+    member?: string;
     /**
      * 关联的ticket
      */
@@ -264,6 +266,7 @@ export interface ListRecordsResponse {
      * 关联的项目
      */
     project?: string;
+    member?: string;
     /**
      * 关联的ticket
      */
@@ -1573,6 +1576,7 @@ export interface RecordDoc {
    * 关联的项目
    */
   project?: string;
+  member?: string;
   /**
    * 关联的ticket
    */
@@ -1626,6 +1630,7 @@ export type Record = {
    * 关联的项目
    */
   project?: string;
+  member?: string;
   /**
    * 关联的ticket
    */
