@@ -248,14 +248,11 @@ export interface ListRecordsRequest {
     _select?: string[];
     user?: string;
     ref?: string;
-    /**
-     * 申请的状态
-     */
-    state?: "APPLYING" | "APPROVED" | "REJECTED";
+    state?: string;
     project?: string;
     ticket?: string;
     ticketType?: string;
-    type?: string;
+    type?: string[];
     tags?: string[];
     milestone?: string;
   };
@@ -376,9 +373,9 @@ export interface ListApplicationsRequest {
     _offset?: number;
     _sort?: string;
     _select?: string[];
-    user?: string;
+    createBy?: string;
     ref?: string;
-    type?: string;
+    type?: string[];
     /**
      * 申请的状态
      */
@@ -549,7 +546,7 @@ export interface CreateMemberRequest {
     /**
      * 名字
      */
-    name?: string;
+    name: string;
     /**
      * 职位
      */
@@ -1333,7 +1330,7 @@ export interface ListFavoritesRequest {
     project?: string;
     ticket?: string;
     state?: string;
-    type?: string;
+    type?: string[];
   };
 }
 export interface ListFavoritesResponse {
@@ -1385,6 +1382,10 @@ export interface CreateNotificationRequest {
       value?: string;
     }[];
     oid: string;
+    /**
+     * 标签
+     */
+    tags?: string[];
   };
 }
 export interface CreateNotificationResponse {
@@ -1404,6 +1405,10 @@ export interface CreateNotificationResponse {
       value?: string;
     }[];
     oid: string;
+    /**
+     * 标签
+     */
+    tags?: string[];
   } & {
     id: string;
     updateAt?: Date;
@@ -1434,6 +1439,10 @@ export interface ListSystemNotificationsResponse {
       value?: string;
     }[];
     oid: string;
+    /**
+     * 标签
+     */
+    tags?: string[];
   } & {
     id: string;
     updateAt?: Date;
@@ -1468,6 +1477,10 @@ export interface ListMemberNotificationsResponse {
       value?: string;
     }[];
     oid: string;
+    /**
+     * 标签
+     */
+    tags?: string[];
   } & {
     id: string;
     updateAt?: Date;
@@ -1745,6 +1758,10 @@ export interface NotificationDoc {
     value?: string;
   }[];
   oid: string;
+  /**
+   * 标签
+   */
+  tags?: string[];
 }
 
 /**
@@ -1763,6 +1780,10 @@ export type Notification = {
     value?: string;
   }[];
   oid: string;
+  /**
+   * 标签
+   */
+  tags?: string[];
 } & {
   id: string;
   updateAt?: Date;
@@ -1778,7 +1799,7 @@ export interface MemberCreateBody {
   /**
    * 名字
    */
-  name?: string;
+  name: string;
   /**
    * 职位
    */
