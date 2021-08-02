@@ -248,7 +248,11 @@ export interface ListRecordsRequest {
     _select?: string[];
     user?: string;
     ref?: string;
-    state?: string;
+    /**
+     * 申请的状态
+     */
+    state?: "APPLYING" | "APPROVED" | "REJECTED";
+    member?: string;
     project?: string;
     ticket?: string;
     ticketType?: string;
@@ -1329,7 +1333,7 @@ export interface ListFavoritesRequest {
     _select?: string[];
     project?: string;
     ticket?: string;
-    state?: string;
+    member?: string;
     type?: string[];
   };
 }
