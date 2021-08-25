@@ -261,6 +261,22 @@ export default class SDK {
       });
     },
     /**
+     * get member token
+     *
+     * @param {GetMemberTokenRequest} req getMemberToken request
+     * @returns {Promise<GetMemberTokenResponse>} Expected response to a valid request
+     */
+    getMemberToken: req => {
+      const { memberId } = req || {};
+
+      if (!memberId) throw new Error("memberId is required for getMemberToken");
+
+      return fetch(`${this.base}/members/${memberId}/token`, {
+        method: "GET",
+        headers: { Authorization: this.auth },
+      });
+    },
+    /**
      * Find member by userId
      *
      * @param {GetMemberByUserRequest} req getMemberByUser request

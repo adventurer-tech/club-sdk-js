@@ -75,6 +75,10 @@ export interface MembersAPI {
    */
   deleteMember(req: DeleteMemberRequest): Promise<void>;
   /**
+   * get member token
+   */
+  getMemberToken(req: GetMemberTokenRequest): Promise<GetMemberTokenResponse>;
+  /**
    * Find member by userId
    */
   getMemberByUser(req: GetMemberByUserRequest): Promise<GetMemberByUserResponse>;
@@ -651,14 +655,6 @@ export interface CreateMemberResponse {
      */
     expAccount?: string;
     /**
-     * 当前已占用的token
-     */
-    token?: number;
-    /**
-     * 令牌账号地址
-     */
-    tokenAccount?: string;
-    /**
      * 最大token数
      */
     maxToken?: number;
@@ -757,14 +753,6 @@ export interface ListMembersResponse {
      */
     expAccount?: string;
     /**
-     * 当前已占用的token
-     */
-    token?: number;
-    /**
-     * 令牌账号地址
-     */
-    tokenAccount?: string;
-    /**
      * 最大token数
      */
     maxToken?: number;
@@ -859,14 +847,6 @@ export interface GetMemberResponse {
      * 经验账号地址
      */
     expAccount?: string;
-    /**
-     * 当前已占用的token
-     */
-    token?: number;
-    /**
-     * 令牌账号地址
-     */
-    tokenAccount?: string;
     /**
      * 最大token数
      */
@@ -1006,14 +986,6 @@ export interface UpdateMemberResponse {
      */
     expAccount?: string;
     /**
-     * 当前已占用的token
-     */
-    token?: number;
-    /**
-     * 令牌账号地址
-     */
-    tokenAccount?: string;
-    /**
      * 最大token数
      */
     maxToken?: number;
@@ -1042,6 +1014,24 @@ export interface UpdateMemberResponse {
 }
 export interface DeleteMemberRequest {
   memberId: string;
+}
+export interface GetMemberTokenRequest {
+  memberId: string;
+}
+export interface GetMemberTokenResponse {
+  /**
+   * 成员的令牌情况
+   */
+  body: {
+    /**
+     * 已使用的token
+     */
+    usedToken?: number;
+    /**
+     * 最大的token
+     */
+    maxToken?: number;
+  };
 }
 export interface GetMemberByUserRequest {
   userId: string;
@@ -1108,14 +1098,6 @@ export interface GetMemberByUserResponse {
      * 经验账号地址
      */
     expAccount?: string;
-    /**
-     * 当前已占用的token
-     */
-    token?: number;
-    /**
-     * 令牌账号地址
-     */
-    tokenAccount?: string;
     /**
      * 最大token数
      */
@@ -1208,14 +1190,6 @@ export interface GetMemberByGithubResponse {
      * 经验账号地址
      */
     expAccount?: string;
-    /**
-     * 当前已占用的token
-     */
-    token?: number;
-    /**
-     * 令牌账号地址
-     */
-    tokenAccount?: string;
     /**
      * 最大token数
      */
@@ -1950,14 +1924,6 @@ export interface MemberDoc {
    */
   expAccount?: string;
   /**
-   * 当前已占用的token
-   */
-  token?: number;
-  /**
-   * 令牌账号地址
-   */
-  tokenAccount?: string;
-  /**
    * 最大token数
    */
   maxToken?: number;
@@ -2040,14 +2006,6 @@ export type Member = {
    */
   expAccount?: string;
   /**
-   * 当前已占用的token
-   */
-  token?: number;
-  /**
-   * 令牌账号地址
-   */
-  tokenAccount?: string;
-  /**
    * 最大token数
    */
   maxToken?: number;
@@ -2073,6 +2031,20 @@ export type Member = {
   createAt?: Date;
   createBy?: string;
 };
+
+/**
+ * 成员的令牌情况
+ */
+export interface MemberToken {
+  /**
+   * 已使用的token
+   */
+  usedToken?: number;
+  /**
+   * 最大的token
+   */
+  maxToken?: number;
+}
 
 /**
  * 成员邀请
